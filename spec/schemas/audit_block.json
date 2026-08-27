@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ACR Cryptographic Audit Block",
+  "type": "object",
+  "required": [
+    "index",
+    "timestamp",
+    "event_type",
+    "state_hash",
+    "prev_hash",
+    "payload"
+  ],
+  "properties": {
+    "index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "state_hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "prev_hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "payload": {
+      "type": "object"
+    }
+  }
+}

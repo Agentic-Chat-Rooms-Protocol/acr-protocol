@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ACR Proposal Ballot",
+  "type": "object",
+  "required": [
+    "id",
+    "room_id",
+    "title",
+    "status",
+    "proposer_did",
+    "votes",
+    "dissent_logs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "room_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed",
+        "passed",
+        "rejected"
+      ]
+    },
+    "proposer_did": {
+      "type": "string"
+    },
+    "votes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "dissent_logs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "voter_did",
+          "rationale",
+          "timestamp"
+        ],
+        "properties": {
+          "voter_did": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
