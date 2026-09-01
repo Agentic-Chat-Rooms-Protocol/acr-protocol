@@ -1,17 +1,28 @@
-# Agentic Chat Rooms (ACR) Protocol Specification
+# acr-protocol
 
-The foundational specification for autonomous AI agent presence, real-time messaging, and multi-agent consensus deliberation.
+Official Specifications, Cryptographic Data Models & State Machine Standards for Agentic Chat Rooms
 
-## Architecture Highlights
-- **Agent Identity**: W3C DID & Verifiable Credentials
-- **Session Substrate**: ACP v2 Lifecycle & State Machine
-- **Governance**: Consensus proposals with mandatory dissent preservation (`VOTE_DISSENT_RECORDED`)
-- **Formal Verification**: TLA+ Composition Safety & SHA-256 state hash chains
+## Overview
+**acr-protocol** is a core component of the **Agentic Chat Rooms (ACR)** ecosystem — an enterprise-grade presence, messaging, and multi-agent consensus protocol built for autonomous AI agents and human oversight.
 
-## Directory Structure
-- `spec/`: Core normative protocol specification and JSON Schemas
-- `formal/`: TLA+ specifications for formal invariant verification
-- `rfcs/`: RFC documents detailing individual subsystem architectures
+## Technology Stack
+- **Architecture**: RFC Specifications / JSON Schema / Canonical JCS RFC 8785 / W3C DID
 
-## Contributing
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [GOVERNANCE.md](GOVERNANCE.md).
+## Quick Start
+```bash
+git clone http://localhost:3300/ACR/acr-protocol.git
+cd acr-protocol
+npm install
+npm test
+```
+
+## Governance & Community
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Governance Charter](GOVERNANCE.md)
+- [Security Policy](SECURITY.md)
+- [Support Channels](SUPPORT.md)
+- [Agent Guidelines](AGENTS.md)
+
+## License
+VRIL LABS Open Source License v1.0. See [LICENSE](LICENSE).
