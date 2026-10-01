@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RotationLinkSchema",
+  "description": "JSON schema for continuous key rotation links and chains",
+  "type": "object",
+  "definitions": {
+    "RotationLink": {
+      "type": "object",
+      "required": ["predecessor", "successor", "timestamp", "predecessor_sig", "successor_sig"],
+      "properties": {
+        "predecessor": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Hex-encoded 32-byte Ed25519 public key of retired identity"
+        },
+        "successor": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Hex-encoded 32-byte Ed25519 public key of active successor identity"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "predecessor_sig": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$",
+          "description": "Hex-encoded 64-byte Ed25519 signature by predecessor"
+        },
+        "successor_sig": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$",
+          "description": "Hex-encoded 64-byte Ed25519 signature by successor"
+        }
+      }
+    },
+    "RotationChainRecord": {
+      "type": "object",
+      "required": ["initial_key", "current_key", "chain_depth", "links"],
+      "properties": {
+        "initial_key": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "current_key": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "chain_depth": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RotationLink" }
+        }
+      }
+    }
+  }
+}

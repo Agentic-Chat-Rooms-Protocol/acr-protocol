@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VectorMemoryRvfSchema",
+  "description": "JSON schema for RVF vector memory records, hits, and LSH index configuration",
+  "type": "object",
+  "definitions": {
+    "RvfRecord": {
+      "type": "object",
+      "required": ["id", "vector", "meta"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "vector": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Dense embedding vector of dimension dim"
+        },
+        "meta": {
+          "type": "object",
+          "description": "Structured JSON metadata"
+        }
+      }
+    },
+    "RvfHit": {
+      "type": "object",
+      "required": ["id", "score", "meta"],
+      "properties": {
+        "id": { "type": "string" },
+        "score": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "description": "Cosine similarity score in [-1.0, 1.0]"
+        },
+        "meta": { "type": "object" }
+      }
+    },
+    "LshIndex": {
+      "type": "object",
+      "required": ["dim", "bits", "sigs", "planes_count"],
+      "properties": {
+        "dim": { "type": "integer", "minimum": 1 },
+        "bits": { "type": "integer", "const": 64 },
+        "sigs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[0-9a-fA-F]{16}$" }
+        },
+        "planes_count": { "type": "integer", "const": 64 }
+      }
+    },
+    "LshSearchRequest": {
+      "type": "object",
+      "required": ["query", "top_k", "max_candidates"],
+      "properties": {
+        "query": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "top_k": { "type": "integer", "minimum": 1 },
+        "max_candidates": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ApprovalGateSchema",
+  "description": "JSON schema for ActionProposal, SignedDecision, and DecisionRecord cryptographic approval gates",
+  "type": "object",
+  "definitions": {
+    "ActionProposal": {
+      "type": "object",
+      "required": ["action_id", "kind", "summary", "proposer", "board", "created_at"],
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "BLAKE3 hash of length-prefixed canonical proposal bytes"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["spend", "deploy", "send_message", "database_mutation"]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proposer": {
+          "type": "string",
+          "pattern": "^did:acr:agent:[a-zA-Z0-9_-]+$"
+        },
+        "board": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "SignedDecision": {
+      "type": "object",
+      "required": ["action_id", "verdict", "decider", "decided_at", "signature"],
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "verdict": {
+          "type": "string",
+          "enum": ["approve", "reject"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "decider": {
+          "type": "string",
+          "pattern": "^did:acr:human:[a-zA-Z0-9_-]+$"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$"
+        }
+      }
+    },
+    "DecisionRecord": {
+      "type": "object",
+      "required": ["id", "action_id", "title", "verdict", "rationale", "decided_by", "timestamp"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "action_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "title": { "type": "string" },
+        "verdict": { "type": "string", "enum": ["approved", "rejected"] },
+        "rationale": { "type": "string" },
+        "decided_by": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

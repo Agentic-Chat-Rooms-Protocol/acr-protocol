@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProcessMilestoneThreadSchema",
+  "description": "JSON schema for dual-granularity threaded agent process milestones and steps",
+  "type": "object",
+  "definitions": {
+    "ProcessStep": {
+      "type": "object",
+      "required": ["step_id", "milestone_id", "step_type", "content", "duration_ms", "status"],
+      "properties": {
+        "step_id": { "type": "string", "minLength": 1 },
+        "milestone_id": { "type": "string", "minLength": 1 },
+        "step_type": {
+          "type": "string",
+          "enum": ["tool_call", "observation", "thought", "sub_task"]
+        },
+        "content": { "type": "string" },
+        "duration_ms": { "type": "integer", "minimum": 0 },
+        "status": {
+          "type": "string",
+          "enum": ["success", "failure"]
+        }
+      }
+    },
+    "ProcessMilestone": {
+      "type": "object",
+      "required": ["milestone_id", "title", "status", "agent", "step_count", "started_at"],
+      "properties": {
+        "milestone_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed", "failed"]
+        },
+        "agent": { "type": "string", "pattern": "^did:acr:agent:[a-zA-Z0-9_-]+$" },
+        "step_count": { "type": "integer", "minimum": 0 },
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "MilestoneThread": {
+      "type": "object",
+      "required": ["milestone", "steps"],
+      "properties": {
+        "milestone": { "$ref": "#/definitions/ProcessMilestone" },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ProcessStep" }
+        }
+      }
+    }
+  }
+}

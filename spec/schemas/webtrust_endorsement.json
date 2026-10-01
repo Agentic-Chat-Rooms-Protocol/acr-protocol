@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WebTrustEndorsementSchema",
+  "description": "JSON schema for Ed25519-signed peer endorsements and transitive Web of Trust traversal",
+  "type": "object",
+  "definitions": {
+    "Endorsement": {
+      "type": "object",
+      "required": ["endorser", "subject", "created_at", "signature"],
+      "properties": {
+        "endorser": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "description": "Hex-encoded 32-byte Ed25519 public key of vouching identity"
+        },
+        "subject": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "description": "Hex-encoded 32-byte Ed25519 public key of vouched peer"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{128}$",
+          "description": "Hex-encoded 64-byte Ed25519 signature over canonical endorsement bytes"
+        }
+      }
+    },
+    "TrustDistanceQuery": {
+      "type": "object",
+      "required": ["roots", "target", "max_depth"],
+      "properties": {
+        "roots": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+          "minItems": 1
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        }
+      }
+    },
+    "TrustResolutionResult": {
+      "type": "object",
+      "required": ["target", "trusted", "depth"],
+      "properties": {
+        "target": { "type": "string" },
+        "trusted": { "type": "boolean" },
+        "depth": { "type": "integer", "minimum": 0 },
+        "via_rotation_predecessor": { "type": "string" }
+      }
+    }
+  }
+}

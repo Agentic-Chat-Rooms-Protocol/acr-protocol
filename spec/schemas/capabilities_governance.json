@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CapabilitiesGovernanceSchema",
+  "description": "JSON schema for 10-bit capability bitmask, role hierarchy, and HMAC role claims",
+  "type": "object",
+  "definitions": {
+    "CapsBitmask": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1023,
+      "description": "10-bit capability bitmask (READ=1, POST=2, CREATE_BOARD=4, EDIT_OWN=8, MODERATE=16, FEDERATE=32, PLUGINS=64, MARKETPLACE=128, SYSOP=256, MCP_EGRESS=512)"
+    },
+    "Role": {
+      "type": "string",
+      "enum": ["guest", "agent", "moderator", "federator", "sysop"]
+    },
+    "RoleClaim": {
+      "type": "object",
+      "required": ["role", "exp", "sig_hex"],
+      "properties": {
+        "role": { "$ref": "#/definitions/Role" },
+        "exp": { "type": "integer", "description": "Unix timestamp expiration in seconds" },
+        "sig_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "description": "HMAC-SHA256 hex signature over role:exp"
+        }
+      }
+    },
+    "VerifiedRoleResult": {
+      "type": "object",
+      "required": ["granted_role", "caps_bitmask", "valid"],
+      "properties": {
+        "granted_role": { "$ref": "#/definitions/Role" },
+        "caps_bitmask": { "$ref": "#/definitions/CapsBitmask" },
+        "valid": { "type": "boolean" },
+        "fallback_applied": { "type": "boolean" }
+      }
+    }
+  }
+}

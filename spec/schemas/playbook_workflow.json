@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PlaybookWorkflowSchema",
+  "description": "JSON schema for declarative content-addressed Playbook workflows and execution runner state",
+  "type": "object",
+  "definitions": {
+    "PlaybookStep": {
+      "type": "object",
+      "required": ["id", "kind"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "enum": ["agent_task", "approval_gate", "tool"] },
+        "agent": { "type": "string" },
+        "instruction": { "type": "string" },
+        "summary": { "type": "string" },
+        "tool": { "type": "string" }
+      }
+    },
+    "Playbook": {
+      "type": "object",
+      "required": ["playbook_id", "name", "version", "trigger", "steps"],
+      "properties": {
+        "playbook_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "BLAKE3 hash of canonical playbook format"
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "trigger": { "type": "string", "minLength": 1 },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PlaybookStep" },
+          "minItems": 1
+        }
+      }
+    },
+    "PlaybookRun": {
+      "type": "object",
+      "required": ["playbook_id", "cursor", "status", "steps_completed"],
+      "properties": {
+        "playbook_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "cursor": { "type": "integer", "minimum": 0 },
+        "status": {
+          "type": "string",
+          "enum": ["running", "awaiting_approval", "completed", "failed"]
+        },
+        "steps_completed": { "type": "integer", "minimum": 0 },
+        "active_gate_action_id": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PostGuardPiiSchema",
+  "description": "JSON schema for PostGuard heuristic prompt injection scanner and egress PII redaction",
+  "type": "object",
+  "definitions": {
+    "PostGuardScan": {
+      "type": "object",
+      "required": ["level", "reasons"],
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["clean", "suspicious", "malicious"]
+        },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "EgressSanitization": {
+      "type": "object",
+      "required": ["redacted_keys_count", "sanitized_payload"],
+      "properties": {
+        "redacted_keys_count": { "type": "integer", "minimum": 0 },
+        "sanitized_payload": { "type": "object" }
+      }
+    }
+  }
+}

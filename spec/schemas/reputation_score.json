@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReputationScoreSchema",
+  "description": "JSON schema for outcome records and Wilson 95% confidence reputation scoring",
+  "type": "object",
+  "definitions": {
+    "OutcomeRecord": {
+      "type": "object",
+      "required": ["agent", "success", "weight", "source", "timestamp"],
+      "properties": {
+        "agent": { "type": "string", "minLength": 1 },
+        "success": { "type": "boolean" },
+        "weight": { "type": "number", "minimum": 0.0001 },
+        "source": { "type": "string", "minLength": 1 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ReputationScore": {
+      "type": "object",
+      "required": ["agent", "successes", "total", "rate", "score"],
+      "properties": {
+        "agent": { "type": "string", "minLength": 1 },
+        "successes": { "type": "number", "minimum": 0.0 },
+        "total": { "type": "number", "minimum": 0.0 },
+        "rate": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Wilson 95% confidence interval lower bound"
+        }
+      }
+    }
+  }
+}

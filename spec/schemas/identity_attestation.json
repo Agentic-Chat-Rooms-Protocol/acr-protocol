@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IdentityAttestationSchema",
+  "description": "JSON schema for nonce-gated challenge-response attestation and verifiable credentials",
+  "type": "object",
+  "definitions": {
+    "ChallengeNonce": {
+      "type": "object",
+      "required": ["nonce", "created_at", "expires_at"],
+      "properties": {
+        "nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "description": "Cryptographically secure 32-byte hex nonce"
+        },
+        "created_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "AttestationResponse": {
+      "type": "object",
+      "required": ["nonce", "agent_pubkey", "signature"],
+      "properties": {
+        "nonce": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "agent_pubkey": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "signature": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{128}$",
+          "description": "Ed25519 signature over acr-auth-v1:nonce"
+        }
+      }
+    },
+    "VerifiableCredential": {
+      "type": "object",
+      "required": ["subject", "claim", "issuer", "issued_at", "signature"],
+      "properties": {
+        "subject": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "claim": { "type": "string", "minLength": 1 },
+        "issuer": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "signature": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{128}$",
+          "description": "Ed25519 signature over canonical credential bytes"
+        }
+      }
+    }
+  }
+}
