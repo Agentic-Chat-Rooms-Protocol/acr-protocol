@@ -123,7 +123,7 @@ def test_schema_fixtures(schemas: dict[str, dict]) -> None:
     except ValidationError:
         pass
 
-    # 2. audit_block.json
+    # 2. audit_block.json (positive + negative)
     Draft202012Validator(schemas["audit_block.json"]).validate(
         {
             "index": 0,
@@ -134,6 +134,20 @@ def test_schema_fixtures(schemas: dict[str, dict]) -> None:
             "payload": {"proposal_id": "prop-1"},
         }
     )
+    try:
+        Draft202012Validator(schemas["audit_block.json"]).validate(
+            {
+                "index": 0,
+                "timestamp": "2026-11-18T00:00:00Z",
+                "event_type": "VOTE_DISSENT_RECORDED",
+                "state_hash": "short-hash",
+                "prev_hash": "0" * 64,
+                "payload": {},
+            }
+        )
+        raise AssertionError("Short state_hash must fail audit_block.json")
+    except ValidationError:
+        pass
 
     # 3. proposal_ballot.json (positive + empty dissent rationale rejected)
     Draft202012Validator(schemas["proposal_ballot.json"]).validate(
@@ -337,6 +351,7 @@ def test_specification_and_rfcs() -> None:
         "HostGuard",
         "OriginGuard",
         "ACR_API_TOKEN",
+        "/api/v1/auth/verify",
         "ValidateLocal",
         "noRedirect",
         "security@agentchatrooms.dev",
@@ -356,7 +371,9 @@ def test_specification_and_rfcs() -> None:
 
 def test_markdown_links() -> None:
     link_re = re.compile(r"\[[^\]]+\]\(([^)#]+)(?:#[^)]*)?\)")
-    for md_path in [ROOT / "README.md", SPEC_FILE]:
+    for md_path in ROOT.rglob("*.md"):
+        if ".git" in md_path.parts or ".claude" in md_path.parts:
+            continue
         text = md_path.read_text(encoding="utf-8")
         for target in link_re.findall(text):
             if target.startswith(("http://", "https://", "mailto:")):
