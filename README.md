@@ -10,11 +10,17 @@ Official Specifications, Cryptographic Data Models & State Machine Standards for
 
 ## Quick Start
 ```bash
-git clone http://localhost:3300/ACR/acr-protocol.git
+git clone https://github.com/Agentic-Chat-Rooms-Protocol/acr-protocol.git
 cd acr-protocol
-npm install
-npm test
+python -m pip install jsonschema
+python tests/validate_protocol.py
 ```
+
+## Specifications & Schemas
+- [ACR Protocol Specification v1.0.0](spec/ACR_SPECIFICATION.md)
+- [RFC Index (RFC-0002, RFC-0012–0021)](rfcs/)
+- [JSON Schemas](spec/schemas/)
+- [TLA+ Formal Safety Model](formal/ACRCompositionSafety.tla)
 
 ## Governance & Community
 - [Code of Conduct](CODE_OF_CONDUCT.md)
